@@ -23,6 +23,7 @@ export interface GameState {
   createdAt: number;
   turn: PlayerSlot;
   winner: PlayerSlot | null;
+  abandonedBy: PlayerSlot | null;
   players: { 1: PlayerState | null; 2: PlayerState | null };
 }
 
@@ -37,6 +38,7 @@ export interface PlayerView {
   you: PlayerSlot;
   turn: PlayerSlot;
   winner: PlayerSlot | null;
+  abandonedBy: PlayerSlot | null;
   opponentJoined: boolean;
   opponentReady: boolean;
   youReady: boolean;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { getPlayerId } from "./playerId";
 import { useGameState } from "./useGameState";
 import * as api from "./api";
@@ -7,6 +7,7 @@ import { Lobby } from "./screens/Lobby";
 import { Placement } from "./screens/Placement";
 import { Battle } from "./screens/Battle";
 import { Result } from "./screens/Result";
+import { TopBar } from "./components/TopBar";
 import type { Ship } from "./game/types";
 
 const CODE_KEY = "kugi:code";
@@ -112,28 +113,60 @@ export default function App() {
     }
   }, [code, playerId, refresh]);
 
+  const handleLeave = useCallback(async () => {
+    if (code) {
+      try {
+        await api.leaveGame(code, playerId);
+      } catch {
+        /* pretinieks vai tīkls var būt prom - tik un tā ejam uz sākumu */
+      }
+    }
+    localStorage.removeItem(CODE_KEY);
+    window.history.replaceState({}, "", location.pathname);
+    setError(null);
+    setBusy(false);
+    setCode(null);
+  }, [code, playerId]);
+
   // Maršrutēšana pēc stāvokļa
   if (!code) {
     return <Home onCreate={handleCreate} onJoin={handleJoin} error={error} />;
   }
+
+  let content: ReactNode;
   if (!view) {
-    return <div className="min-h-full flex items-center justify-center text-slate-400">Ielādē…</div>;
-  }
-  if (view.status === "waiting") {
-    return <Lobby code={code} />;
-  }
-  if (view.status === "placing") {
-    if (!view.youReady) return <Placement onReady={handleReady} busy={busy} />;
-    return (
+    content = <div className="min-h-full flex items-center justify-center text-slate-400">Ielādē…</div>;
+  } else if (view.status === "waiting") {
+    content = <Lobby code={code} />;
+  } else if (view.status === "placing") {
+    content = view.youReady ? (
       <div className="min-h-full flex flex-col items-center justify-center gap-3 p-6 text-center text-slate-500">
         <span className="h-3 w-3 animate-pulse rounded-full bg-amber-400" />
         Gaida, kamēr pretinieks izvieto kuģus…
       </div>
+    ) : (
+      <Placement onReady={handleReady} busy={busy} />
+    );
+  } else if (view.status === "playing") {
+    content = <Battle view={view} onShoot={handleShoot} busy={busy} />;
+  } else {
+    const abandoned = view.abandonedBy != null && view.abandonedBy !== view.you;
+    content = (
+      <Result
+        won={view.winner === view.you}
+        abandoned={abandoned}
+        onRematch={handleRematch}
+        onLeave={handleLeave}
+        busy={busy}
+      />
     );
   }
-  if (view.status === "playing") {
-    return <Battle view={view} onShoot={handleShoot} busy={busy} />;
-  }
-  // finished
-  return <Result won={view.winner === view.you} onRematch={handleRematch} busy={busy} />;
+
+  const active = view?.status === "playing" || view?.status === "placing";
+  return (
+    <div className="min-h-full flex flex-col">
+      <TopBar code={code} active={active} onLeave={handleLeave} />
+      <div className="flex-1">{content}</div>
+    </div>
+  );
 }
