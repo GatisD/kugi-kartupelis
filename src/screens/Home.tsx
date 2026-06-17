@@ -47,6 +47,26 @@ export function Home({
         </button>
       </div>
 
+      <div className="w-full max-w-xs">
+        <div className="font-display text-center tracking-[0.25em] text-brass/90 text-[0.7rem] mb-3.5">
+          KĀ SPĒLĒT DIVATĀ
+        </div>
+        <ol className="flex flex-col gap-3 text-left">
+          {[
+            "Izveido spēli - dabūsi kodu un dalāmu saiti.",
+            "Otrs atver saiti vai ievada kodu un pievienojas.",
+            "Izvietojiet floti un šaujiet pēc kārtas. Kas pirmais nogremdē pretinieka kuģus, uzvar!",
+          ].map((s, i) => (
+            <li key={i} className="flex gap-3 items-start">
+              <span className="shrink-0 mt-px h-5 w-5 rounded-full border border-brass/50 text-brass text-[0.7rem] font-display flex items-center justify-center">
+                {i + 1}
+              </span>
+              <span className="text-foam/65 text-sm leading-snug">{s}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
       {error && <div className="text-hit-2 text-sm">{error}</div>}
     </div>
   );
