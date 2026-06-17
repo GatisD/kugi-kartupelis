@@ -1,6 +1,6 @@
-import { GRID_SIZE, FLEET, TOTAL_SHIPS } from "./constants";
-import { cellKey, inBounds, shipCells, parseCell } from "./coords";
-import type { Ship, Orientation } from "./types";
+import { GRID_SIZE, FLEET, TOTAL_SHIPS } from "./constants.js";
+import { cellKey, inBounds, shipCells, parseCell } from "./coords.js";
+import type { Ship, Orientation } from "./types.js";
 
 function neighborhood(row: number, col: number): string[] {
   const cells: string[] = [];

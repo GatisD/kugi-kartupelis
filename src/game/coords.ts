@@ -1,5 +1,5 @@
-import { GRID_SIZE, COLUMNS } from "./constants";
-import type { Ship } from "./types";
+import { GRID_SIZE, COLUMNS } from "./constants.js";
+import type { Ship } from "./types.js";
 
 export function cellKey(row: number, col: number): string {
   return `${row},${col}`;

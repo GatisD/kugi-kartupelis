@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { loadGame, redactFor, slotOf } from "./_store";
-import { ApiError, sendErr } from "./_http";
+import { loadGame, redactFor, slotOf } from "./_store.js";
+import { ApiError, sendErr } from "./_http.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {

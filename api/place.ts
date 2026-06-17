@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { atomicUpdate, slotOf } from "./_store";
-import { ApiError, sendErr } from "./_http";
-import { validatePlacement } from "../src/game/logic";
-import type { Ship } from "../src/game/types";
+import { atomicUpdate, slotOf } from "./_store.js";
+import { ApiError, sendErr } from "./_http.js";
+import { validatePlacement } from "../src/game/logic.js";
+import type { Ship } from "../src/game/types.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {

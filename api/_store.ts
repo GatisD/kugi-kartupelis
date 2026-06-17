@@ -1,7 +1,7 @@
 import { Redis } from "@upstash/redis";
-import { ApiError } from "./_http";
-import { cellHitsAnyShip, isShipSunk } from "../src/game/logic";
-import type { GameState, PlayerSlot, PlayerView, ShotResult } from "../src/game/types";
+import { ApiError } from "./_http.js";
+import { cellHitsAnyShip, isShipSunk } from "../src/game/logic.js";
+import type { GameState, PlayerSlot, PlayerView, ShotResult } from "../src/game/types.js";
 
 // Lēna inicializācija: klients tiek izveidots tikai pie pirmā Redis izsaukuma,
 // lai tīrās funkcijas (redactFor) būtu importējamas un testējamas bez env mainīgajiem.
