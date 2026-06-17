@@ -1,5 +1,5 @@
 import { GRID_SIZE, FLEET, TOTAL_SHIPS } from "./constants";
-import { cellKey, inBounds, shipCells } from "./coords";
+import { cellKey, inBounds, shipCells, parseCell } from "./coords";
 import type { Ship, Orientation } from "./types";
 
 function neighborhood(row: number, col: number): string[] {
@@ -85,4 +85,61 @@ function tryPlaceOne(size: number, placed: Ship[]): Ship | null {
     if (canPlace(placed, candidate)) return candidate;
   }
   return null;
+}
+
+export function isShipSunk(ship: Ship): boolean {
+  return ship.hits.every(Boolean);
+}
+
+export function cellHitsAnyShip(ships: Ship[], cell: string): boolean {
+  const { row, col } = parseCell(cell);
+  return ships.some((s) => shipCells(s).some((c) => c.row === row && c.col === col));
+}
+
+export function surroundingCells(ship: Ship): string[] {
+  const own = new Set(shipCells(ship).map((c) => cellKey(c.row, c.col)));
+  const out = new Set<string>();
+  for (const { row, col } of shipCells(ship)) {
+    for (let dr = -1; dr <= 1; dr++)
+      for (let dc = -1; dc <= 1; dc++) {
+        const r = row + dr;
+        const c = col + dc;
+        if (!inBounds(r, c)) continue;
+        const k = cellKey(r, c);
+        if (!own.has(k)) out.add(k);
+      }
+  }
+  return [...out];
+}
+
+export function applyShot(
+  defenderShips: Ship[],
+  shooterShotsAt: string[],
+  cell: string
+): { result: "hit" | "miss"; sunkShip: Ship | null; allSunk: boolean; ships: Ship[]; shotsAt: string[] } {
+  const shotsAt = shooterShotsAt.includes(cell) ? [...shooterShotsAt] : [...shooterShotsAt, cell];
+  const { row, col } = parseCell(cell);
+  const ships = defenderShips.map((s) => ({ ...s, hits: [...s.hits] }));
+
+  let result: "hit" | "miss" = "miss";
+  let sunkShip: Ship | null = null;
+
+  for (const ship of ships) {
+    const cells = shipCells(ship);
+    const idx = cells.findIndex((c) => c.row === row && c.col === col);
+    if (idx !== -1) {
+      ship.hits[idx] = true;
+      result = "hit";
+      if (isShipSunk(ship)) {
+        sunkShip = ship;
+        for (const sc of surroundingCells(ship)) {
+          if (!shotsAt.includes(sc)) shotsAt.push(sc);
+        }
+      }
+      break;
+    }
+  }
+
+  const allSunk = ships.every(isShipSunk);
+  return { result, sunkShip, allSunk, ships, shotsAt };
 }
