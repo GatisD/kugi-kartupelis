@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Board } from "../components/Board";
 import type { CellState } from "../components/Cell";
 import { shipCells } from "../game/coords";
@@ -56,6 +56,31 @@ export function Battle({
     return "empty";
   }
 
+  // Screenshake: skaita redzamos trāpījumus + nogremdētos kuģus, trīc, kad pieaug
+  const hitCount = useMemo(() => {
+    let n = 0;
+    for (const s of view.myShots) if (s.result === "hit") n++;
+    for (const cell of incoming) if (myShipCells.has(cell)) n++;
+    return n;
+  }, [view.myShots, incoming, myShipCells]);
+  const sunkCount = view.sunkOpponentShips.length + sunkMyCells.size;
+
+  const prevHits = useRef(hitCount);
+  const prevSunk = useRef(sunkCount);
+  const [shakeClass, setShakeClass] = useState("");
+  useEffect(() => {
+    let cls = "";
+    if (sunkCount > prevSunk.current) cls = "shake-strong";
+    else if (hitCount > prevHits.current) cls = "shake";
+    prevHits.current = hitCount;
+    prevSunk.current = sunkCount;
+    if (cls) {
+      setShakeClass(cls);
+      const t = setTimeout(() => setShakeClass(""), 560);
+      return () => clearTimeout(t);
+    }
+  }, [hitCount, sunkCount]);
+
   function handleTarget(row: number, col: number) {
     if (!myTurn || busy) return;
     const key = `${row},${col}`;
@@ -64,9 +89,10 @@ export function Battle({
   }
 
   return (
-    <div className="min-h-full flex flex-col gap-4 p-4 animate-rise">
+    <div className={`min-h-full flex flex-col gap-4 p-4 animate-rise ${shakeClass}`}>
       <div
-        className={`text-center rounded-xl py-2.5 font-display tracking-wide border ${
+        key={myTurn ? "me" : "opp"}
+        className={`animate-turn text-center rounded-xl py-2.5 font-display tracking-wide border ${
           myTurn ? "bg-brass/15 border-brass/50 text-brass-2 pulse-ring" : "bg-foam/5 border-foam/10 text-foam/50"
         }`}
       >

@@ -36,7 +36,12 @@ export function Board({
           <Fragment key={`r${r}`}>
             <div className="tick flex items-center justify-center text-[0.72rem]">{r + 1}</div>
             {idx.map((c) => (
-              <Cell key={`${r}-${c}`} state={cellState(r, c)} onClick={onCell ? () => onCell(r, c) : undefined} />
+              <Cell
+                key={`${r}-${c}`}
+                state={cellState(r, c)}
+                delay={(r + c) * 18}
+                onClick={onCell ? () => onCell(r, c) : undefined}
+              />
             ))}
           </Fragment>
         ))}

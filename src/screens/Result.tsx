@@ -23,7 +23,23 @@ export function Result({
     );
   }
   return (
-    <div className="min-h-full flex flex-col items-center justify-center gap-6 p-6 text-center animate-rise">
+    <div className="relative overflow-hidden min-h-full flex flex-col items-center justify-center gap-6 p-6 text-center animate-rise">
+      {won && (
+        <div className="pointer-events-none absolute inset-0">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <span
+              key={i}
+              className="absolute bottom-0 rounded-full bg-brass/30"
+              style={{
+                left: `${8 + i * 10}%`,
+                width: `${8 + (i % 3) * 7}px`,
+                height: `${8 + (i % 3) * 7}px`,
+                animation: `bubble ${2.6 + (i % 4) * 0.5}s ease-in ${i * 0.28}s infinite`,
+              }}
+            />
+          ))}
+        </div>
+      )}
       <div className={`text-7xl ${won ? "animate-sway" : ""}`}>{won ? "🏆" : "🌊"}</div>
       <div className="flex flex-col items-center gap-2">
         <h2 className="font-display text-4xl font-bold text-foam">{won ? "Uzvara!" : "Nogrimi"}</h2>
