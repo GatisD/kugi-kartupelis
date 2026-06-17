@@ -13,36 +13,30 @@ export function Result({
 }) {
   if (abandoned) {
     return (
-      <div className="min-h-full flex flex-col items-center justify-center gap-6 p-6 text-center">
-        <div className="text-6xl">🚪</div>
-        <h2 className="text-2xl font-extrabold text-slate-800">Pretinieks pameta spēli</h2>
-        <button
-          onClick={onLeave}
-          disabled={busy}
-          className="rounded-2xl bg-sky-500 px-6 py-4 text-lg font-bold text-white disabled:opacity-40 active:scale-95 transition"
-        >
+      <div className="min-h-full flex flex-col items-center justify-center gap-6 p-6 text-center animate-rise">
+        <div className="text-6xl animate-sway">⚓</div>
+        <h2 className="font-display text-3xl font-bold text-foam">Pretinieks pameta spēli</h2>
+        <button onClick={onLeave} disabled={busy} className="btn-brass px-6 py-4">
           Uz sākumu
         </button>
       </div>
     );
   }
   return (
-    <div className="min-h-full flex flex-col items-center justify-center gap-6 p-6 text-center">
-      <div className="text-6xl">{won ? "🏆" : "🥔"}</div>
-      <h2 className="text-3xl font-extrabold text-slate-800">{won ? "Tu uzvarēji!" : "Šoreiz zaudēji"}</h2>
+    <div className="min-h-full flex flex-col items-center justify-center gap-6 p-6 text-center animate-rise">
+      <div className={`text-7xl ${won ? "animate-sway" : ""}`}>{won ? "🏆" : "🌊"}</div>
+      <div className="flex flex-col items-center gap-2">
+        <h2 className="font-display text-4xl font-bold text-foam">{won ? "Uzvara!" : "Nogrimi"}</h2>
+        <div className="h-px w-24 bg-gradient-to-r from-transparent via-brass to-transparent" />
+        <p className="text-foam/60 text-sm">
+          {won ? "Visa pretinieka flote jūras dibenā." : "Tava flote ir nogremdēta."}
+        </p>
+      </div>
       <div className="flex flex-col gap-3 w-full max-w-xs">
-        <button
-          onClick={onRematch}
-          disabled={busy}
-          className="rounded-2xl bg-emerald-500 px-6 py-4 text-lg font-bold text-white disabled:opacity-40 active:scale-95 transition"
-        >
+        <button onClick={onRematch} disabled={busy} className="btn-brass px-6 py-4 text-lg">
           {busy ? "…" : "Spēlēt vēlreiz"}
         </button>
-        <button
-          onClick={onLeave}
-          disabled={busy}
-          className="rounded-2xl bg-slate-200 px-6 py-3 font-bold text-slate-600 active:scale-95 transition"
-        >
+        <button onClick={onLeave} disabled={busy} className="btn-ghost px-6 py-3">
           Uz sākumu
         </button>
       </div>

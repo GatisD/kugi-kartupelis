@@ -11,34 +11,43 @@ export function Home({
 }) {
   const [code, setCode] = useState("");
   return (
-    <div className="min-h-full flex flex-col items-center justify-center gap-6 p-6">
-      <h1 className="text-3xl font-extrabold tracking-tight text-slate-800">Kuģi 🥔</h1>
-      <p className="text-slate-500 text-center">Spēlē ar otru cilvēku - katrs no sava telefona.</p>
+    <div className="min-h-full flex flex-col items-center justify-center gap-8 p-6 text-center animate-rise">
+      <div className="flex flex-col items-center gap-3">
+        <span className="font-display tracking-[0.4em] text-brass text-[0.7rem]">K A R T U P E L I S</span>
+        <h1 className="font-display text-6xl font-bold text-foam leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+          Kuģi
+        </h1>
+        <div className="h-px w-28 bg-gradient-to-r from-transparent via-brass to-transparent" />
+        <p className="text-foam/70 text-sm max-w-[17rem]">
+          Divi spēlētāji, divi telefoni, viena jūra. Nogremdē pretinieka floti pirmais.
+        </p>
+      </div>
 
-      <button
-        onClick={onCreate}
-        className="w-full max-w-xs rounded-2xl bg-emerald-500 px-6 py-4 text-lg font-bold text-white active:scale-95 transition"
-      >
+      <button onClick={onCreate} className="btn-brass w-full max-w-xs px-6 py-4 text-lg">
         Izveidot spēli
       </button>
 
-      <div className="w-full max-w-xs flex gap-2">
+      <div className="w-full max-w-xs">
+        <div className="flex items-center gap-3 text-foam/40 text-xs mb-3">
+          <span className="h-px flex-1 bg-foam/15" /> vai pievienojies <span className="h-px flex-1 bg-foam/15" />
+        </div>
         <input
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase().slice(0, 4))}
           placeholder="KODS"
-          className="flex-1 rounded-2xl border border-slate-300 px-4 py-4 text-center text-lg font-mono tracking-widest uppercase"
+          inputMode="text"
+          className="w-full rounded-xl bg-foam/5 border border-brass/30 px-4 py-4 text-center text-2xl font-display tracking-[0.4em] text-foam uppercase placeholder:text-foam/25 outline-none focus:border-brass/70 transition-colors"
         />
         <button
           onClick={() => code.length === 4 && onJoin(code)}
           disabled={code.length !== 4}
-          className="rounded-2xl bg-sky-500 px-5 py-4 font-bold text-white disabled:opacity-40 active:scale-95 transition"
+          className="btn-ghost w-full mt-2 px-5 py-3.5"
         >
           Pievienoties
         </button>
       </div>
 
-      {error && <div className="text-rose-600 text-sm">{error}</div>}
+      {error && <div className="text-hit-2 text-sm">{error}</div>}
     </div>
   );
 }

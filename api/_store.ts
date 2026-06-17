@@ -98,6 +98,14 @@ export function slotOf(game: GameState, playerId: string): PlayerSlot | null {
   return null;
 }
 
+// Vienkāršs skaitītāja rate-limit: INCR ar TTL. Met 429, ja pārsniegts.
+export async function rateLimit(bucket: string, id: string, limit: number, windowSec: number): Promise<void> {
+  const key = `rl:${bucket}:${id}`;
+  const n = Number(await getRedis().incr(key));
+  if (n === 1) await getRedis().expire(key, windowSec);
+  if (n > limit) throw new ApiError(429, "Pārāk daudz jaunu spēļu. Pamēģini pēc brīža.");
+}
+
 export function redactFor(game: GameState, playerId: string): PlayerView {
   const you: PlayerSlot = game.players[2]?.id === playerId ? 2 : 1;
   const oppSlot: PlayerSlot = you === 1 ? 2 : 1;

@@ -50,8 +50,8 @@ export function Placement({ onReady, busy }: { onReady: (ships: Ship[]) => void;
   }
 
   return (
-    <div className="min-h-full flex flex-col gap-4 p-4">
-      <h2 className="text-center text-lg font-bold text-slate-700">Izvieto savus kuģus</h2>
+    <div className="min-h-full flex flex-col gap-4 p-4 animate-rise">
+      <h2 className="text-center font-display text-xl font-bold text-foam tracking-wide">Izvieto savu floti</h2>
 
       <Board cellState={cellState} onCell={handleCell} />
 
@@ -61,38 +61,40 @@ export function Placement({ onReady, busy }: { onReady: (ships: Ship[]) => void;
             key={r.size}
             disabled={r.count === 0}
             onClick={() => setSelectedSize(r.size)}
-            className={`rounded-xl px-3 py-2 text-sm font-bold border-2 transition ${
-              selectedSize === r.size ? "border-emerald-500 bg-emerald-50" : "border-slate-200"
-            } disabled:opacity-30`}
+            className={`flex items-center gap-2 rounded-xl px-3 py-2 border transition disabled:opacity-25 ${
+              selectedSize === r.size ? "border-brass bg-brass/15" : "border-foam/15 bg-foam/5"
+            }`}
           >
-            {r.size}-rūšu × {r.count}
+            <span className="flex gap-0.5">
+              {Array.from({ length: r.size }).map((_, i) => (
+                <span key={i} className="h-2.5 w-2.5 rounded-[2px] bg-foam/85" />
+              ))}
+            </span>
+            <span className="text-foam/75 text-xs font-semibold">×{r.count}</span>
           </button>
         ))}
       </div>
 
       <div className="flex justify-center gap-2">
-        <button
-          onClick={() => setOrientation((o) => (o === "h" ? "v" : "h"))}
-          className="rounded-xl bg-slate-200 px-4 py-2 text-sm font-bold"
-        >
-          Pagriezt: {orientation === "h" ? "↔" : "↕"}
+        <button onClick={() => setOrientation((o) => (o === "h" ? "v" : "h"))} className="btn-ghost px-4 py-2 text-sm">
+          Pagriezt {orientation === "h" ? "↔" : "↕"}
         </button>
-        <button onClick={() => setShips(randomPlacement())} className="rounded-xl bg-slate-200 px-4 py-2 text-sm font-bold">
+        <button onClick={() => setShips(randomPlacement())} className="btn-ghost px-4 py-2 text-sm">
           Sajaukt
         </button>
-        <button onClick={() => setShips([])} className="rounded-xl bg-slate-200 px-4 py-2 text-sm font-bold">
+        <button onClick={() => setShips([])} className="btn-ghost px-4 py-2 text-sm">
           Notīrīt
         </button>
       </div>
 
-      <p className="text-center text-xs text-slate-400">
-        Izvēlies kuģi un uzsit laukā, lai noliktu. Uzsit uz nolikta kuģa, lai paņemtu atpakaļ.
+      <p className="text-center text-xs text-foam/45 max-w-sm mx-auto">
+        Izvēlies kuģi un uzsit kartē, lai noliktu. Uzsit uz nolikta kuģa, lai paņemtu atpakaļ.
       </p>
 
       <button
         onClick={() => valid && onReady(ships)}
         disabled={!valid || busy}
-        className="mt-auto rounded-2xl bg-emerald-500 px-6 py-4 text-lg font-bold text-white disabled:opacity-40 active:scale-95 transition"
+        className="btn-brass mt-auto px-6 py-4 text-lg"
       >
         {busy ? "Sūta…" : "Gatavs!"}
       </button>

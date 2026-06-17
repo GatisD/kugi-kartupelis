@@ -13,12 +13,9 @@ export function TopBar({
     onLeave();
   }
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-white border-b border-slate-200">
-      <span className="text-xs font-mono font-bold tracking-widest text-slate-400">{code}</span>
-      <button
-        onClick={handle}
-        className="rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-bold text-slate-600 active:scale-95 transition"
-      >
+    <div className="flex items-center justify-between px-4 py-2.5 border-b border-brass/20 bg-abyss/40 backdrop-blur-sm">
+      <span className="font-display tracking-[0.32em] text-brass/80 text-xs">{code}</span>
+      <button onClick={handle} className="btn-ghost px-3 py-1.5 text-xs">
         Pamest
       </button>
     </div>

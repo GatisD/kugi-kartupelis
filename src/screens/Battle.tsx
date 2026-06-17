@@ -15,7 +15,6 @@ export function Battle({
 }) {
   const myTurn = view.turn === view.you;
 
-  // Pretinieka lauks (mērķis)
   const myShotMap = useMemo(() => new Map(view.myShots.map((s) => [s.cell, s.result])), [view.myShots]);
   const sunkOppCells = useMemo(() => {
     const set = new Set<string>();
@@ -32,7 +31,6 @@ export function Battle({
     return "empty";
   }
 
-  // Mans lauks
   const myShipCells = useMemo(() => {
     const set = new Set<string>();
     for (const s of view.myShips) for (const c of shipCells(s)) set.add(`${c.row},${c.col}`);
@@ -66,22 +64,22 @@ export function Battle({
   }
 
   return (
-    <div className="min-h-full flex flex-col gap-3 p-4">
+    <div className="min-h-full flex flex-col gap-4 p-4 animate-rise">
       <div
-        className={`text-center rounded-xl py-2 font-bold ${
-          myTurn ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
+        className={`text-center rounded-xl py-2.5 font-display tracking-wide border ${
+          myTurn ? "bg-brass/15 border-brass/50 text-brass-2 pulse-ring" : "bg-foam/5 border-foam/10 text-foam/50"
         }`}
       >
         {myTurn ? "Tavs gājiens - šauj!" : "Gaida pretinieka gājienu…"}
       </div>
 
       <div>
-        <div className="text-center text-sm font-semibold text-slate-500 mb-1">Pretinieka lauks</div>
+        <div className="text-center font-display text-xs tracking-[0.25em] text-foam/55 mb-1.5">PRETINIEKA ŪDEŅI</div>
         <Board cellState={targetState} onCell={myTurn && !busy ? handleTarget : undefined} />
       </div>
 
       <div>
-        <div className="text-center text-sm font-semibold text-slate-500 mb-1">Tavs lauks</div>
+        <div className="text-center font-display text-xs tracking-[0.25em] text-foam/55 mb-1.5">TAVA FLOTE</div>
         <Board cellState={ownState} />
       </div>
     </div>

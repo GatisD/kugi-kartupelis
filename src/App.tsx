@@ -135,13 +135,13 @@ export default function App() {
 
   let content: ReactNode;
   if (!view) {
-    content = <div className="min-h-full flex items-center justify-center text-slate-400">Ielādē…</div>;
+    content = <div className="min-h-full flex items-center justify-center font-display tracking-wide text-foam/50">Ielādē…</div>;
   } else if (view.status === "waiting") {
     content = <Lobby code={code} />;
   } else if (view.status === "placing") {
     content = view.youReady ? (
-      <div className="min-h-full flex flex-col items-center justify-center gap-3 p-6 text-center text-slate-500">
-        <span className="h-3 w-3 animate-pulse rounded-full bg-amber-400" />
+      <div className="min-h-full flex flex-col items-center justify-center gap-3 p-6 text-center text-foam/60">
+        <span className="float-buoy text-2xl">⚓</span>
         Gaida, kamēr pretinieks izvieto kuģus…
       </div>
     ) : (
