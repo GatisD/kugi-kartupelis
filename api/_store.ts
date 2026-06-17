@@ -55,6 +55,7 @@ export async function createGame(playerId: string): Promise<GameState> {
     turn: 1,
     winner: null,
     abandonedBy: null,
+    turnDeadline: null,
     players: {
       1: { id: playerId, ready: false, ships: [], shotsAt: [] },
       2: null,
@@ -126,6 +127,7 @@ export function redactFor(game: GameState, playerId: string): PlayerView {
     turn: game.turn,
     winner: game.winner,
     abandonedBy: game.abandonedBy ?? null,
+    turnDeadline: game.turnDeadline ?? null,
     opponentJoined: !!opponent,
     opponentReady: !!opponent?.ready,
     youReady: !!me?.ready,

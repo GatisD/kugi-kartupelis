@@ -13,3 +13,7 @@ export const FLEET: { size: number; count: number }[] = [
 
 export const TOTAL_SHIPS = 10;
 export const TOTAL_SHIP_CELLS = 20;
+
+// Gājiena taimeris: cik sekundes ir vienam gājienam
+export const TURN_SECONDS = 30;
+export const TURN_MS = TURN_SECONDS * 1000;

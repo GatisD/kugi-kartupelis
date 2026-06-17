@@ -32,6 +32,9 @@ export function rematch(code: string, playerId: string) {
 export function leaveGame(code: string, playerId: string) {
   return post<{ ok: true }>("leave", { code, playerId });
 }
+export function timeoutTurn(code: string, playerId: string) {
+  return post<{ ok: true }>("timeout", { code, playerId });
+}
 export async function getState(code: string, playerId: string): Promise<PlayerView> {
   const r = await fetch(`/api/state?code=${encodeURIComponent(code)}&playerId=${encodeURIComponent(playerId)}`);
   const data = await r.json();

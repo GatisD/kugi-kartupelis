@@ -7,10 +7,12 @@ import type { PlayerView } from "../game/types";
 export function Battle({
   view,
   onShoot,
+  onTimeout,
   busy,
 }: {
   view: PlayerView;
   onShoot: (cell: string) => void;
+  onTimeout: () => void;
   busy: boolean;
 }) {
   const myTurn = view.turn === view.you;
@@ -81,6 +83,32 @@ export function Battle({
     }
   }, [hitCount, sunkCount]);
 
+  // Gājiena taimeris: atpakaļskaitīšana + automātiska gājiena nodošana, kad beidzas
+  const [secLeft, setSecLeft] = useState<number | null>(null);
+  const timeoutReq = useRef(false);
+  useEffect(() => {
+    timeoutReq.current = false;
+  }, [view.turn, view.turnDeadline]);
+  useEffect(() => {
+    if (view.status !== "playing" || view.turnDeadline == null) {
+      setSecLeft(null);
+      return;
+    }
+    const deadline = view.turnDeadline;
+    const tick = () => {
+      const ms = deadline - Date.now();
+      setSecLeft(Math.max(0, Math.ceil(ms / 1000)));
+      const grace = myTurn ? 0 : -2000; // gaidītājs dod 2s buferi (ja pretinieks pazudis)
+      if (ms <= grace && !timeoutReq.current) {
+        timeoutReq.current = true;
+        onTimeout();
+      }
+    };
+    tick();
+    const id = setInterval(tick, 500);
+    return () => clearInterval(id);
+  }, [view.status, view.turnDeadline, myTurn, onTimeout]);
+
   function handleTarget(row: number, col: number) {
     if (!myTurn || busy) return;
     const key = `${row},${col}`;
@@ -97,6 +125,7 @@ export function Battle({
         }`}
       >
         {myTurn ? "Tavs gājiens - šauj!" : "Gaida pretinieka gājienu…"}
+        {secLeft != null && <span className={secLeft <= 10 ? "text-hit-2" : ""}> · {secLeft}s</span>}
       </div>
 
       <div>

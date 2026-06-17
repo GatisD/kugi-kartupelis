@@ -3,6 +3,7 @@ import { atomicUpdate, slotOf } from "./_store.js";
 import { ApiError, sendErr } from "./_http.js";
 import { applyShot, isShipSunk } from "../src/game/logic.js";
 import { inBounds, parseCell, shipCells, cellKey } from "../src/game/coords.js";
+import { TURN_MS } from "../src/game/constants.js";
 import type { PlayerSlot } from "../src/game/types.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -33,8 +34,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (r.allSunk) {
         g.status = "finished";
         g.winner = slot;
+        g.turnDeadline = null;
       } else if (r.result === "miss") {
         g.turn = opp;
+        g.turnDeadline = Date.now() + TURN_MS;
+      } else {
+        // trāpījums - tas pats spēlētājs šauj vēlreiz, svaigs taimeris
+        g.turnDeadline = Date.now() + TURN_MS;
       }
     });
 

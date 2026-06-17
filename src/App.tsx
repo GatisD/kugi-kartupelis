@@ -8,6 +8,7 @@ import { Placement } from "./screens/Placement";
 import { Battle } from "./screens/Battle";
 import { Result } from "./screens/Result";
 import { TopBar } from "./components/TopBar";
+import { Waves } from "./components/Waves";
 import type { Ship } from "./game/types";
 
 const CODE_KEY = "kugi:code";
@@ -113,6 +114,16 @@ export default function App() {
     }
   }, [code, playerId, refresh]);
 
+  const handleTimeout = useCallback(async () => {
+    if (!code) return;
+    try {
+      await api.timeoutTurn(code, playerId);
+      await refresh();
+    } catch {
+      /* serveris izšķir; nākamais poll sakārtos */
+    }
+  }, [code, playerId, refresh]);
+
   const handleLeave = useCallback(async () => {
     if (code) {
       try {
@@ -130,7 +141,12 @@ export default function App() {
 
   // Maršrutēšana pēc stāvokļa
   if (!code) {
-    return <Home onCreate={handleCreate} onJoin={handleJoin} error={error} />;
+    return (
+      <>
+        <Waves />
+        <Home onCreate={handleCreate} onJoin={handleJoin} error={error} />
+      </>
+    );
   }
 
   let content: ReactNode;
@@ -148,7 +164,7 @@ export default function App() {
       <Placement onReady={handleReady} busy={busy} />
     );
   } else if (view.status === "playing") {
-    content = <Battle view={view} onShoot={handleShoot} busy={busy} />;
+    content = <Battle view={view} onShoot={handleShoot} onTimeout={handleTimeout} busy={busy} />;
   } else {
     const abandoned = view.abandonedBy != null && view.abandonedBy !== view.you;
     content = (
@@ -164,9 +180,12 @@ export default function App() {
 
   const active = view?.status === "playing" || view?.status === "placing";
   return (
-    <div className="min-h-full flex flex-col">
-      <TopBar code={code} active={active} onLeave={handleLeave} />
-      <div className="flex-1">{content}</div>
-    </div>
+    <>
+      <Waves />
+      <div className="min-h-full flex flex-col">
+        <TopBar code={code} active={active} onLeave={handleLeave} />
+        <div className="flex-1">{content}</div>
+      </div>
+    </>
   );
 }

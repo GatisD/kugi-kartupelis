@@ -10,6 +10,7 @@ function baseGame(): GameState {
     turn: 1,
     winner: null,
     abandonedBy: null,
+    turnDeadline: null,
     players: {
       1: { id: "p1", ready: true, ships: [{ size: 1, row: 0, col: 0, orientation: "h", hits: [false] }], shotsAt: ["5,5"] },
       2: { id: "p2", ready: true, ships: [{ size: 1, row: 5, col: 5, orientation: "h", hits: [true] }], shotsAt: [] },

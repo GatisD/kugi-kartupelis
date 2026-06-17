@@ -347,6 +347,53 @@
     transform: translateX(130%);
   }
 }
+
+/* ---- Animēti "paper" viļņi fonā ---- */
+.waves {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60vh;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-repeat: repeat-x;
+  background-size: 200px 100%;
+  will-change: background-position;
+}
+.wave-1 {
+  height: 42vh;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='60' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath d='M0 18 q50 -16 100 0 t100 0 L200 60 L0 60 Z' fill='%230f3656'/%3E%3C/svg%3E");
+  animation: wavescroll 16s linear infinite;
+}
+.wave-2 {
+  height: 30vh;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='60' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath d='M0 22 q50 -18 100 0 t100 0 L200 60 L0 60 Z' fill='%230a2840'/%3E%3C/svg%3E");
+  animation: wavescroll 26s linear infinite reverse;
+}
+.wave-3 {
+  height: 20vh;
+  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='60' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath d='M0 16 q50 -14 100 0 t100 0 L200 60 L0 60 Z' fill='%2317456a'/%3E%3C/svg%3E");
+  animation: wavescroll 36s linear infinite;
+}
+@keyframes wavescroll {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -200px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

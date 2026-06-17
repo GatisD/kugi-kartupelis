@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { atomicUpdate, slotOf } from "./_store.js";
 import { ApiError, sendErr } from "./_http.js";
 import { validatePlacement } from "../src/game/logic.js";
+import { TURN_MS } from "../src/game/constants.js";
 import type { Ship } from "../src/game/types.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -33,6 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (g.players[1]?.ready && g.players[2]?.ready) {
         g.status = "playing";
         g.turn = Math.random() < 0.5 ? 1 : 2;
+        g.turnDeadline = Date.now() + TURN_MS;
       }
     });
     res.status(200).json({ ok: true, status: game.status });

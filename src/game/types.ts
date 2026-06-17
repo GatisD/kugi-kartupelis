@@ -24,6 +24,7 @@ export interface GameState {
   turn: PlayerSlot;
   winner: PlayerSlot | null;
   abandonedBy: PlayerSlot | null;
+  turnDeadline: number | null; // epoch ms, kad beidzas pašreizējais gājiens
   players: { 1: PlayerState | null; 2: PlayerState | null };
 }
 
@@ -39,6 +40,7 @@ export interface PlayerView {
   turn: PlayerSlot;
   winner: PlayerSlot | null;
   abandonedBy: PlayerSlot | null;
+  turnDeadline: number | null;
   opponentJoined: boolean;
   opponentReady: boolean;
   youReady: boolean;
